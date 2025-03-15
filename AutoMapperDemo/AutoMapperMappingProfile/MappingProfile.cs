@@ -2,7 +2,7 @@
 using AutoMapperDemo.Dto;
 using AutoMapperDemo.Model;
 
-namespace AutoMapperDemo.MappingProfile;
+namespace AutoMapperDemo.AutoMapperMappingProfile;
 
 public class MappingProfile : Profile
 {

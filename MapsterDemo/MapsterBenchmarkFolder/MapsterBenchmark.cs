@@ -1,33 +1,31 @@
-﻿using AutoMapper;
-using AutoMapperDemo.AutoMapperMappingProfile;
-using AutoMapperDemo.Dto;
-using AutoMapperDemo.Model;
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
+using Mapster;
+using MapsterDemo.Dto;
+using MapsterDemo.MapsterConfig;
+using MapsterDemo.Model;
 
-namespace AutoMapperDemo.Benchmark;
+namespace MapsterDemo.MapsterBenchmarkFolder;
+
 
 [MemoryDiagnoser]
-public class AutoMapperBenchmark
+public class MapsterBenchmark
 {
-	private readonly IMapper _mapper;
 	private readonly Customer _customer;
-
-	public AutoMapperBenchmark()
+	public MapsterBenchmark()
 	{
-		// AutoMapper konfigürasyonu
-		MapperConfiguration config = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>());
-		_mapper = config.CreateMapper();
+		// Mapster konfigürasyonu
+		MappingConfig.Configure();
 
 		// Test verisi oluşturma
 		_customer = CreateSampleCustomer();
-	}
 
+	}
 
 	//Burada bir nesneyi mapliyoruz.
 	[Benchmark]
 	public CustomerDto MapCustomerToDto()
 	{
-		return _mapper.Map<CustomerDto>(_customer);
+		return _customer.Adapt<CustomerDto>();
 	}
 
 
@@ -41,7 +39,7 @@ public class AutoMapperBenchmark
 			customers.Add(CreateSampleCustomer(i));
 		}
 
-		return _mapper.Map<List<CustomerDto>>(customers);
+		return customers.Adapt<List<CustomerDto>>();
 	}
 
 	private Customer CreateSampleCustomer(int id = 1)
